@@ -21,7 +21,7 @@ function checkMapVisibility() {
 }
 
 function createMarker(location, incident) {
-    const customIconUrl = '/images/incidentLocation-removebg-preview.png';
+    const customIconUrl = 'images/incidentlocation-removebg-preview.png';
     const iconSize = new google.maps.Size(50, 50);
     const labelFontSize = '30px';
     const labelFontOffset = new google.maps.Point(0, -100);
