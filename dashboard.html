@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-store" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>CodeRied+</title>
+    <link rel="icon" sizes="32x32" href="/images/feature1.png" type="image/png">
+    <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="dashboard.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script type="module" src="mainscript.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+</head>
+<style>
+    html,
+    body {
+        height: 100%;
+    }
+
+    body {
+        background: linear-gradient(0deg, hsla(238, 74%, 13%, 1) 10%, hsla(249, 91%, 23%, 1) 100%);
+        background-size: cover;
+        background-attachment: fixed;
+    }
+
+    .logo-leftpage,
+    .logo-rightpage,
+    .logo-leftpage2,
+    .logo-rightpage2 {
+        width: 75px;
+        height: auto;
+        max-width: 100%;
+    }
+
+    @media (max-width: 768px) {
+
+        .logo-leftpage,
+        .logo-rightpage,
+        .logo-leftpage2,
+        .logo-rightpage2 {
+            max-width: 80px;
+        }
+    }
+
+    .logo-leftpage,
+    .logo-leftpage2 {
+        margin-left: 150px;
+    }
+
+    .logo-rightpage,
+    .logo-rightpage2 {
+        margin-right: 150px;
+    }
+
+    #showall {
+        display: none;
+    }
+
+    .notification-icon {
+        position: fixed;
+        top: 7px;
+        right: 6px;
+        z-index: 1000;
+        display: inline-block;
+        transition: transform 0.3s ease, color 0.3s ease;
+    }
+
+    .notification-icon2 {
+        position: fixed;
+        top: 7px;
+        right: 68px;
+        z-index: 1000;
+        display: inline-block;
+        transition: transform 0.3s ease, color 0.3s ease;
+    }
+
+    .notification-icon ion-icon,
+    .notification-icon2 ion-icon {
+        font-size: 35px;
+        border-radius: 15px;
+        color: #333;
+        background: #fff;
+        padding: 10px;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.6);
+        transition: box-shadow 0.3s ease, background 0.3s ease;
+    }
+
+    .notification-badge,
+    .notification-badge2 {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background-color: red;
+        color: white;
+        border-radius: 50%;
+        padding: 2px 6px;
+        font-size: 12px;
+        font-weight: bold;
+        display: none;
+    }
+
+    .notification-icon.active .notification-badge,
+    .notification-icon2.active .notification-badge2 {
+        display: inline-block;
+    }
+
+    .card {
+        position: fixed;
+        top: 0;
+        right: 0;
+        margin-right: 0;
+        z-index: 1000;
+        width: 35%;
+        height: 100%;
+        text-align: center;
+        box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s ease-in-out;
+        transform: scale(0);
+    }
+
+    .card2 {
+        position: fixed;
+        top: 0;
+        right: 0;
+        margin-right: 0;
+        z-index: 1000;
+        width: 68%;
+        height: 100%;
+        text-align: center;
+        box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s ease-in-out;
+        transform: scale(0);
+    }
+
+    #popupCard,
+    #popupCardmessage {
+        display: none;
+    }
+
+    .card.show,
+    .card2.show {
+        transform: scale(1);
+    }
+
+    .card.hide,
+    .card2.hide {
+        transform: scale(0);
+    }
+
+    .card-body {
+        border-radius: 10px;
+        border: 3px solid;
+    }
+
+    .headalignment,
+    .headalignment2 {
+        width: 70%;
+        height: 100%;
+        box-sizing: border-box;
+        border: 4px solid white;
+        border-radius: 70px;
+        overflow: hidden;
+    }
+
+    #vgraph {
+        color: white !important;
+        position: absolute;
+        height: 90vh;
+        width: 80vw;
+        display: none;
+        margin-left: 265px;
+    }
+
+    #filters {
+        margin-bottom: 20px;
+        margin-top: 10px;
+        margin-left: 10px;
+    }
+
+    #filters label {
+        margin-right: 10px;
+        margin-top: 10px;
+        margin-left: 10px;
+        color: #ffffff;
+    }
+
+    #filters select {
+        border-radius: 20px;
+        padding: 5px 10px;
+        border: 2px solid #ffffff;
+        background-color: transparent;
+        color: #ffffff;
+    }
+
+    #filters select option {
+        color: #0b42a7;
+    }
+
+    .record-container {
+        height: 550px;
+        overflow-y: auto;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        background-color: #fff;
+        margin-top: 20px;
+        margin-bottom: 0;
+    }
+
+    .record-container thead {
+        position: sticky;
+        top: 0;
+        background-color: #f8f9fa;
+        z-index: 1;
+    }
+
+    .btn-sm2 {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+        width: 20%;
+        border-radius: 20px;
+        box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.6);
+    }
+
+    .btn-danger {
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.6);
+    }
+
+    #profile-tab-pane {
+        width: 100%;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        font-size: 18px;
+        text-align: left;
+    }
+
+    th,
+    td {
+        padding: 12px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #f4f4f4;
+    }
+
+    .user-image-table {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+
+
+    #SearchBar::placeholder,
+    #SearchBar2::placeholder {
+        color: white;
+    }
+
+    .modal-dialog {
+        cursor: move;
+    }
+
+    #vehiculargraph {
+        max-width: 1100px;
+        max-height: 600px;
+    }
+
+    .custom-select-container,
+    .custom-select-container2,
+    .custom-select-container3,
+    .custom-select-container4,
+    .custom-select-container5,
+    .custom-select-container6 {
+        position: relative;
+        width: 100%;
+    }
+
+    .custom-input,
+    .custom-input2,
+    .custom-input3,
+    .custom-input4,
+    .custom-input5,
+    .custom-input6 {
+        width: 100%;
+        padding-right: 40px;
+        box-sizing: border-box;
+    }
+
+    .dropdown-indicator,
+    .dropdown-indicator2,
+    .dropdown-indicator3,
+    .dropdown-indicator4,
+    .dropdown-indicator5,
+    .dropdown-indicator6 {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        border: none;
+        background: none;
+        cursor: pointer;
+        font-size: 16px;
+        color: #888;
+        padding: 0;
+    }
+
+    .dropdown-options,
+    .dropdown-options2,
+    .dropdown-options3,
+    .dropdown-options4,
+    .dropdown-options5,
+    .dropdown-options6 {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        max-height: 200px;
+        overflow-y: auto;
+        border: 1px solid #ccc;
+        background: white;
+        z-index: 1000;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+    }
+
+    .dropdown-options li,
+    .dropdown-options2 li,
+    .dropdown-options3 li,
+    .dropdown-options4 li,
+    .dropdown-options5 li,
+    .dropdown-options6 li {
+        padding: 10px;
+        cursor: pointer;
+    }
+
+    .dropdown-options li:hover,
+    .dropdown-options2 li:hover,
+    .dropdown-options3 li:hover,
+    .dropdown-options4 li:hover,
+    .dropdown-options5 li:hover,
+    .dropdown-options6 li:hover {
+        background-color: #f1f1f1;
+    }
+
+    .close-btn {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        background-color: transparent;
+        border: none;
+        font-size: 20px;
+        color: red;
+        cursor: pointer;
+    }
+
+    .close-btn:hover {
+        color: darkred;
+    }
+
+    h2,
+    h3,
+    h4,
+    h5 {
+        color: white;
+    }
+
+    .btn-print {
+        right: 10px;
+    }
+
+    .btn-add {
+        right: 121px;
+    }
+
+    .btn-next {
+        right: 231px;
+    }
+
+    .btn-prev {
+        right: 341px;
+    }
+
+    .btn-add,
+    .btn-print,
+    .btn-next,
+    .btn-prev {
+        z-index: 1000;
+        width: 100px;
+        height: 40px;
+        bottom: 7px;
+        position: fixed;
+        border-radius: 20px;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.6);
+        border: none;
+        color: black;
+        font-size: 12px;
+        font-weight: bold;
+        background-color: transparent;
+        border: 2px solid white;
+        color: white;
+    }
+
+    .rounded-button {
+        border-radius: 20px;
+        background-color: rgb(33, 174, 33);
+        color: black;
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.6);
+        z-index: 1000;
+        border: none;
+    }
+
+    .rounded-button:hover {
+        background-color: rgb(27, 137, 27);
+    }
+
+    .rounded-buttonedit {
+        border-radius: 20px;
+        background-color: rgb(252, 171, 21);
+        color: black;
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.6);
+        z-index: 1000;
+        border: none;
+    }
+
+    .rounded-buttonedit:hover {
+        background-color: rgb(198, 147, 52);
+    }
+</style>
+
+<body>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD6dFiKa_GUxL5x4CYIWgdm5rWdzJxlBB4&callback=initMap"
+        async defer></script>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+        data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Add Incident Record</h1>
+                    <button type="button" class="close-btn" data-bs-dismiss="modal" aria-label="Close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="exampleFormControlTextarea1" class="form-label labs text-center">Name</label>
+                        <textarea class="form-control" id="NameMod" rows="3"
+                            oninput="capitalizeFirstLetter(this)"></textarea>
+                    </div>
+                    <div class="container mt-3">
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label class="labs text-center w-100">Age</label>
+                                <input class="form-control" type="text" id="AgeMod" min="0" step="1">
+                                <div class="error" id="error-message"></div>
+                            </div>
+                            <div class="col-md-5 mb-3">
+                                <label class="labs text-center w-100">Type</label>
+                                <div class="custom-select-container3">
+                                    <input type="text" class="form-control custom-input3" id="TypeMod"
+                                        placeholder="Select/Specify" autocomplete="off">
+                                    <button class="dropdown-indicator3" type="button">&#9662;</button>
+                                    <ul class="dropdown-options3" id="typeOptions">
+                                        <li>vehicular</li>
+                                        <li>flood</li>
+                                        <li>landslide</li>
+                                        <li>assistance</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="labs text-center w-100">Gender</label>
+                                <select class="form-control" id="GenderMod">
+                                    <option value="" selected disabled></option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+
+                    </div>
+                    <div class="mb-3">
+                        <label class="labs text-center w-100">Location</label>
+                        <div class="custom-select-container">
+                            <input type="text" class="form-control custom-input" id="LocationMod"
+                                placeholder="Select/Specify" autocomplete="off">
+                            <button class="dropdown-indicator" type="button">&#9662;</button>
+                            <ul class="dropdown-options" id="locationOptions">
+                                <li>Balintonga, Aloran</li>
+                                <li>Banisilon, Aloran</li>
+                                <li>Burgos, Aloran</li>
+                                <li>Calube, Aloran</li>
+                                <li>Caputol, Aloran</li>
+                                <li>Casusan, Aloran</li>
+                                <li>Conat, Aloran</li>
+                                <li>Culpan, Aloran</li>
+                                <li>Dalisay (poblacion), Aloran</li>
+                                <li>Dullan, Aloran</li>
+                                <li>Ibabao (poblacion), Aloran</li>
+                                <li>Tubod, Aloran</li>
+                                <li>Labo, Aloran</li>
+                                <li>Lawaan, Aloran</li>
+                                <li>Lobogon, Aloran</li>
+                                <li>Lumbayao, Aloran</li>
+                                <li>Makawa, Aloran</li>
+                                <li>Manamong, Aloran</li>
+                                <li>Matipaz, Aloran</li>
+                                <li>Maular, Aloran</li>
+                                <li>Matizan, Aloran</li>
+                                <li>Mohon, Aloran</li>
+                                <li>Monterico, Aloran</li>
+                                <li>Nabuna, Aloran</li>
+                                <li>Palayan, Aloran</li>
+                                <li>Pelong, Aloran</li>
+                                <li>Ospital (poblacion), Aloran</li>
+                                <li>Roxas, Aloran</li>
+                                <li>San Pedro, Aloran</li>
+                                <li>Santa Ana, Aloran</li>
+                                <li>Sinampongan, Aloran</li>
+                                <li>Taguanao, Aloran</li>
+                                <li>Tawi-Tawi, Aloran</li>
+                                <li>Toril, Aloran</li>
+                                <li>Tuburan, Aloran</li>
+                                <li>Zamora, Aloran</li>
+                                <li>Macuban (Sina-ad), Aloran</li>
+                                <li>Tugaya, Aloran</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2 mb-3">
+                            <label class="labs"></label>
+                            <input class="form-control" type="datetime-local" id="DateMod">
+                        </div>
+                        <div class="col-md-10 mb-3">
+                            <label class="labs text-center w-100">Incident Date </label>
+                            <input class="form-control" type="text" id="formattedDate" readonly>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleFormControlTextarea1" class="form-label labs text-center">Actions</label>
+                        <textarea class="form-control" id="ActMod" rows="3"
+                            oninput="capitalizeAfterPeriod(this)"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="labs">Responder</label>
+                        <div class="custom-select-container5">
+                            <textarea class="form-control custom-input5" id="ResponderMod"
+                                placeholder="Select Responders" rows="3" autocomplete="off"></textarea>
+                            <button class="dropdown-indicator5" type="button">&#9662;</button>
+                            <ul class="dropdown-options5" id="responderOptions">
+                                <li>Responder Option1</li>
+                                <li>Responder Option2</li>
+                                <li>Responder Option3</li>
+                                <li>Responder Option4</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="labs text-center">Sender/Caller </label>
+                        <input class="form-control" type="text" id="FullnameMod">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="AddModBtn" type="button" class="btn btn-light rounded-button" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true"
+        data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Incident Report</h1>
+                    <button type="button" class="close-btn" data-bs-dismiss="modal" aria-label="Close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="exampleFormControlTextarea1" class="form-label labs text-center">Name</label>
+                        <textarea class="form-control" id="EditNameMod" rows="3"
+                            oninput="capitalizeFirstLetter(this)"></textarea>
+                    </div>
+                    <div class="container mt-3">
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label class="labs text-center w-100">Age</label>
+                                <input class="form-control" type="text" id="EditAgeMod" min="0" step="1">
+                                <div class="error1" id="error-message1"></div>
+                            </div>
+                            <div class="col-md-5 mb-3">
+                                <label class="labs text-center w-100">Type</label>
+                                <div class="custom-select-container6">
+                                    <input type="text" class="form-control custom-input6" id="EditTypeMod"
+                                        placeholder="Select/Specify" autocomplete="off">
+                                    <button class="dropdown-indicator6" type="button">&#9662;</button>
+                                    <ul class="dropdown-options6" id="edittypeOptions">
+                                        <li>vehicular</li>
+                                        <li>flood</li>
+                                        <li>landslide</li>
+                                        <li>assistance</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="labs text-center w-100">Gender</label>
+                                <select class="form-control" id="EditGenderMod">
+                                    <option value="" selected disabled></option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="labs">Location</label>
+                        <div class="custom-select-container2">
+                            <input type="text" class="form-control custom-input2" id="EditLocationMod"
+                                placeholder="Enter or select location" autocomplete="off">
+                            <button class="dropdown-indicator2" type="button2">&#9662;</button>
+                            <ul class="dropdown-options2" id="locationOptions2">
+                                <li>Balintonga, Aloran</li>
+                                <li>Banisilon, Aloran</li>
+                                <li>Burgos, Aloran</li>
+                                <li>Calube, Aloran</li>
+                                <li>Caputol, Aloran</li>
+                                <li>Casusan, Aloran</li>
+                                <li>Conat, Aloran</li>
+                                <li>Culpan, Aloran</li>
+                                <li>Dalisay (poblacion), Aloran</li>
+                                <li>Dullan, Aloran</li>
+                                <li>Ibabao (poblacion), Aloran</li>
+                                <li>Tubod, Aloran</li>
+                                <li>Labo, Aloran</li>
+                                <li>Lawaan, Aloran</li>
+                                <li>Lobogon, Aloran</li>
+                                <li>Lumbayao, Aloran</li>
+                                <li>Makawa, Aloran</li>
+                                <li>Manamong, Aloran</li>
+                                <li>Matipaz, Aloran</li>
+                                <li>Maular, Aloran</li>
+                                <li>Matizan, Aloran</li>
+                                <li>Mohon, Aloran</li>
+                                <li>Monterico, Aloran</li>
+                                <li>Nabuna, Aloran</li>
+                                <li>Palayan, Aloran</li>
+                                <li>Pelong, Aloran</li>
+                                <li>Ospital (poblacion), Aloran</li>
+                                <li>Roxas, Aloran</li>
+                                <li>San Pedro, Aloran</li>
+                                <li>Santa Ana, Aloran</li>
+                                <li>Sinampongan, Aloran</li>
+                                <li>Taguanao, Aloran</li>
+                                <li>Tawi-Tawi, Aloran</li>
+                                <li>Toril, Aloran</li>
+                                <li>Tuburan, Aloran</li>
+                                <li>Zamora, Aloran</li>
+                                <li>Macuban (Sina-ad), Aloran</li>
+                                <li>Tugaya, Aloran</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="labs text-center w-100">Incident Date</label>
+                        <input class="form-control" type="text" id="EditDateMod">
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleFormControlTextarea1" class="form-label labs text-center">Actions</label>
+                        <textarea class="form-control" id="EditActMod" rows="3"
+                            oninput="capitalizeAfterPeriod(this)"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="labs">Responder</label>
+                        <div class="custom-select-container4">
+                            <textarea class="form-control custom-input4" id="EditResponderMod"
+                                placeholder="Select Responders" rows="3" autocomplete="off"></textarea>
+                            <button class="dropdown-indicator4" type="button">&#9662;</button>
+                            <ul class="dropdown-options4" id="editresponderOptions">
+                                <li>Responder Option1</li>
+                                <li>Responder Option2</li>
+                                <li>Responder Option3</li>
+                                <li>Responder Option4</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="labs text-center">Sender/Caller </label>
+                        <input class="form-control" type="text" id="EditFullnameMod">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="UpdModBtn" type="button" class="btn btn-success rounded-buttonedit"
+                        data-bs-toggle="modal" data-bs-target="#editModal">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="sidebar open">
+        <a href="#" class="logo-box">
+            <i class=''><ion-icon name="person-circle-outline"></ion-icon></i>
+            <div class="logo-name">CodeReid+</div>
+        </a>
+        <ul class="sidebar-list">
+            <li>
+                <div class="title">
+                    <a href="#" onclick="showContent('map')" class="link">
+                        <i class='map'><ion-icon name="navigate-circle"></ion-icon></ion-icon></i>
+                        <span class="name">Map</span>
+                    </a>
+                </div>
+            <li class="dropdown">
+                <div class="title">
+                    <a href="#" class="link">
+                        <i class='report'><ion-icon name="newspaper"></ion-icon></i>
+                        <span class="name">Report</span>
+                    </a>
+                    <i class='bx bxs-chevron-down'></i>
+                </div>
+                <div class="submenu">
+                    <a href="#" onclick="showContent('vehicular')" class="link">Monthly reports</a>
+                    <a href="#" onclick="showContent('flood')" class="link">All records</a>
+                </div>
+            </li>
+            <li>
+                <div class="title">
+                    <a href="#" onclick="showContent('vgraph')" class="link">
+                        <i><ion-icon name="bar-chart"></ion-icon></i>
+                        <span class="name">Incident Volume</span>
+                    </a>
+                </div>
+            </li>
+            <li>
+                <div class="title">
+                    <a href="index.html" id="logout" class="link">
+                        <i class=''><ion-icon name="log-out"></ion-icon></i>
+                        <span class="name">Logout</span>
+                    </a>
+            </li>
+    </div>
+    <div class="main-content">
+        <div class="content" id="dashboardcontent">
+            <main class="main-container"></main>
+        </div>
+        <div class="content" id="reportcontent" style="display: none;">
+            <h2>report</h2>
+        </div>
+        <div class="content" id="vehicular" style="display: none;">
+            <div class="contentheader">
+                <div class="headalignment">
+                    <div class="pageheading">
+                        <img src="images/seal.png" alt="Left Logo" class="logo-leftpage">
+                        <div>
+                            <h2>Incident Reports</h2>
+                            <h5>as of</h5>
+                            <div id="header">
+                                <h3 id="currentMonth"></h3>
+                                <h3 id="currentYear"></h3>
+                            </div>
+                        </div>
+                        <img src="images/seal2.jpg" alt="Right Logo" class="logo-rightpage">
+                    </div>
+                </div>
+            </div>
+            <div class="contentbody">
+                <div class="container mt-3">
+                    <div class="input-group mb-3 mt-3">
+                        <input id="SearchBar" type="text" class="form-control" placeholder="Search here . . . ."
+                            onkeyup="searchFunction('SearchBar', 'tbody1')" aria-label="Search"
+                            aria-describedby="button-addon2">
+                    </div>
+                    <div class="noprint">
+                        <button type="button" class="btn btn-primary btn-prev" id="previousButton"
+                            disabled>previous</button>
+                        <button type="button" class="btn btn-primary btn-next" id="nextButton">next</button>
+                        <button type="button" class="btn btn-success btn-add" data-bs-toggle="modal"
+                            data-bs-target="#exampleModal">add record</button>
+                        <button type="button" class="btn btn-light btn-print" onclick="printReport('printreport')">print
+                            report</button>
+                    </div>
+                    <div id="printreport" class="table-container">
+                        <div class="head">
+                            <h1>Republic of the Philippines</h1>
+                            <h1>Misamis Occidental</h1>
+                            <h2>Municipality of Aloran</h2>
+                            <h3>Contact no. 09455239174</h3>
+                            <h4>Municipal Disaster Risk Reduction Management Office</h4>
+
+                            <div class="logo-container">
+                                <img src="images/seal.png" alt="Left Logo" class="logo-left">
+                                <img src="images/seal2.jpg" alt="Right Logo" class="logo-right">
+                            </div>
+                        </div>
+                        <div class="headtitle">
+                            <h5>Incident Reports</h5>
+                        </div>
+                        <table class="table table-primary table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Age</th>
+                                    <th>Gender</th>
+                                    <th>Incident Location</th>
+                                    <th>Incident Type</th>
+                                    <th>Incident Date</th>
+                                    <th>Responder</th>
+                                    <th>Action Taken</th>
+                                    <th>Sender/Caller</th>
+                                    <th class="noprint">Update Report</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody1">
+                            </tbody>
+                        </table>
+                        <h2 class="signature">Juan Dela Cruz</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content" id="flood" style="display: none;">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane"
+                        type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">All Record
+                        List</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane"
+                        type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">Users
+                        List</button>
+                </li>
+            </ul>
+
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab"
+                    tabindex="0">
+                    <div id="filters">
+                        <label for="monthFilter">Month:</label>
+                        <select id="monthFilter">
+                            <option value="">All Months</option>
+                            <option value="0">January</option>
+                            <option value="1">February</option>
+                            <option value="2">March</option>
+                            <option value="3">April</option>
+                            <option value="4">May</option>
+                            <option value="5">June</option>
+                            <option value="6">July</option>
+                            <option value="7">August</option>
+                            <option value="8">September</option>
+                            <option value="9">October</option>
+                            <option value="10">November</option>
+                            <option value="11">December</option>
+                        </select>
+
+                        <label for="yearFilter">Year:</label>
+                        <select id="yearFilter">
+                            <option value="">All Years</option>
+                        </select>
+                    </div>
+                    <div id="tableContainer" class="record-container"></div> <!-- Container for the table -->
+                </div>
+
+                <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab"
+                    tabindex="0">
+                    <!-- HTML structure -->
+                    <table id="approvedUsersList" class="table table-striped">
+                        <div class="input-group mb-3 mt-3">
+                            <input id="SearchBar2" type="text" class="form-control" placeholder="Search here . . . ."
+                                onkeyup="searchFunction('SearchBar2', 'tbody2')" aria-label="Search"
+                                aria-describedby="button-addon2">
+                        </div>
+                        <thead>
+                            <tr>
+                                <th>User Image</th>
+                                <th>Fullname</th>
+                                <th>Username</th>
+                                <th>Mobile Number</th>
+                                <th>ID</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody2"></tbody> <!-- Table body where data will be injected -->
+                    </table>
+                </div>
+            </div>
+
+        </div>
+        <div class="content" id="landslide" style="display: none;">
+            <h2>Duty Form</h2>
+        </div>
+    </div>
+    <div class="second-content">
+
+    </div>
+    <div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="messageModalLabel"
+        aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title" id="messageModalLabel">Incident Alert!</h1>
+                    <span aria-hidden="true">&times;</span>
+                </div>
+                <div class="modal-body" id="modalBody">
+                </div>
+                <div class="modal-footer">
+                    <button id="btn-function" type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                        onclick="stopAudio();showContent('map')">View Location</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content" id="vgraph">
+        <canvas id="vehiculargraph"></canvas>
+    </div>
+    <div class="content" id="map">
+        <div id="maptrack"></div>
+    </div>
+    <audio id="notificationSound2" src="audio/notification.mp3" preload="auto" loop></audio>
+    <audio id="notificationSound" src="audio/alarm-6786.mp3" preload="auto" loop></audio>
+    <div class="icons-container">
+        <div class="notification-icon" id="notificationIcon">
+            <a href="#" id="notificationButton" title="Notifications">
+                <ion-icon name="notifications-outline"></ion-icon>
+                <span class="notification-badge" id="notificationBadge">!</span>
+            </a>
+        </div>
+        <div class="notification-icon2" id="messageIcon">
+            <a href="#" id="messageButton" title="Incident Messages">
+                <ion-icon name="mail-outline"></ion-icon>
+                <span class="notification-badge2" id="messageBadge">!</span>
+            </a>
+        </div>
+    </div>
+    <div id="popupCard" class="card text-bg-dark p-3">
+        <div class="card-header">Validate Users</div>
+        <div class="card-body">
+            <div id="userList" class="list-group">
+            </div>
+        </div>
+    </div>
+    <div id="popupCardmessage" class="card2 text-bg-dark p-3">
+        <div class="card-header2">Messages</div>
+        <div class="card-body2">
+            <div id="messageList" class="list-groupmessage"></div>
+        </div>
+    </div>
+
+    <div class="toggle-sidebar"></div>
+
+    <script src="dashboard.js"></script>
+    <script src="mapconnection.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-auth.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</body>
+
+</html>
